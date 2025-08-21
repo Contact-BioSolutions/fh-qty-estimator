@@ -372,18 +372,9 @@
     <div class="container">
         <div class="header">
             <h1>How much FireHawk do I need?</h1>
-            <p>Calculate herbicide quantities using L/100L water application rates</p>
         </div>
         
         <div class="calculator">
-            <!-- Unit System Toggle -->
-            <div class="form-group">
-                <label>Unit System</label>
-                <div class="unit-selector">
-                    <button id="metric-btn" class="active" onclick="setUnitSystem('metric')">Metric</button>
-                    <button id="imperial-btn" onclick="setUnitSystem('imperial')">US</button>
-                </div>
-            </div>
             
             <!-- Weed Size Selection & Area Input -->
             <div class="form-group">
@@ -448,19 +439,19 @@
                     <div class="package-grid" id="package-grid">
                         <!-- Packages will be populated by JavaScript -->
                     </div>
+                    <button class="add-to-cart" onclick="addToCart()">
+                        🛒 Add Recommended Package to Cart
+                    </button>
                 </div>
                 
                 <!-- Calculation Details -->
                 <div class="calculation-details">
-                    <h4>🧮 Calculation Breakdown</h4>
+                    <h4>Calculation Breakdown</h4>
                     <div id="calc-breakdown">
                         <!-- Calculation steps will be populated by JavaScript -->
                     </div>
                 </div>
                 
-                <button class="add-to-cart" onclick="addToCart()">
-                    🛒 Add Recommended Package to Cart
-                </button>
             </div>
         </div>
     </div>
@@ -577,7 +568,7 @@
             if (currentUnitSystem === 'metric') {
                 // Area input handles its own display
                 document.getElementById('rate-value').textContent = applicationRate.toFixed(1) + ' L/100L';
-                document.getElementById('firehawk-result').textContent = Math.round(fireHawkQuantity) + ' L';
+                document.getElementById('firehawk-result').textContent = Math.round(fireHawkQuantity).toLocaleString('en-US') + ' L';
                 document.getElementById('water-result').textContent = waterVolume.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' L';
                 document.getElementById('total-result').textContent = totalSprayVolume.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' L';
             } else {
