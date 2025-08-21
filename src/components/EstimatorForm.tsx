@@ -1,0 +1,389 @@
+// Estimator Form Component - Main form container
+
+import React, { useCallback, useMemo } from 'react';
+import { EstimatorFormProps, WeedSize } from '../types';
+import { AreaInput } from './AreaInput';
+import { WeedSizeSelector } from './WeedSizeSelector';
+import { ApplicationRateSlider } from './ApplicationRateSlider';
+import { unitConverter } from '../utils/UnitConverter';
+import { UNIT_SYSTEM_DEFAULTS, ARIA_LABELS } from '../constants';
+
+export const EstimatorForm: React.FC<EstimatorFormProps> = ({
+  onValuesChange,
+  unitSystem,
+  weedSizeConfig,
+  applicationRates,
+  initialValues
+}) => {
+  const [formValues, setFormValues] = React.useState(() => ({
+    area: initialValues?.area || 1000,
+    areaUnit: initialValues?.areaUnit || UNIT_SYSTEM_DEFAULTS[unitSystem].areaUnit,
+    weedSize: initialValues?.weedSize || WeedSize.MEDIUM,
+    applicationRate: initialValues?.applicationRate || applicationRates[WeedSize.MEDIUM].default,
+    applicationUnit: initialValues?.applicationUnit || UNIT_SYSTEM_DEFAULTS[unitSystem].volumeUnit,
+    unitSystem: initialValues?.unitSystem || unitSystem
+  }));
+
+  // Memoize system defaults to prevent unnecessary re-renders
+  const systemDefaults = useMemo(() => UNIT_SYSTEM_DEFAULTS[unitSystem], [unitSystem]);
+
+  // Update form values when unit system changes
+  React.useEffect(() => {
+    if (formValues.unitSystem !== unitSystem) {
+      const convertedValues = unitConverter.convertToSystem(formValues, unitSystem);
+      setFormValues(convertedValues);
+      onValuesChange(convertedValues);
+    }
+  }, [unitSystem, formValues, onValuesChange]);
+
+  // Handle area input change
+  const handleAreaChange = useCallback((newArea: number) => {
+    const updatedValues = {
+      ...formValues,
+      area: newArea
+    };
+    setFormValues(updatedValues);
+    onValuesChange(updatedValues);
+  }, [formValues, onValuesChange]);
+
+  // Handle weed size change
+  const handleWeedSizeChange = useCallback((newWeedSize: WeedSize) => {
+    // Auto-adjust application rate based on new weed size
+    const newRate = applicationRates[newWeedSize].default;
+    const updatedValues = {
+      ...formValues,
+      weedSize: newWeedSize,
+      applicationRate: newRate
+    };
+    setFormValues(updatedValues);
+    onValuesChange(updatedValues);
+  }, [formValues, applicationRates, onValuesChange]);
+
+  // Handle application rate change
+  const handleApplicationRateChange = useCallback((newRate: number) => {
+    const updatedValues = {
+      ...formValues,
+      applicationRate: newRate
+    };
+    setFormValues(updatedValues);
+    onValuesChange(updatedValues);
+  }, [formValues, onValuesChange]);
+
+  // Handle unit system toggle
+  const handleUnitSystemToggle = useCallback(() => {
+    const newUnitSystem = unitSystem === 'imperial' ? 'metric' : 'imperial';
+    const convertedValues = unitConverter.convertToSystem(formValues, newUnitSystem);
+    setFormValues(convertedValues);
+    onValuesChange(convertedValues);
+  }, [unitSystem, formValues, onValuesChange]);
+
+  // Get application rate bounds for current weed size
+  const rateBounds = useMemo(() => {
+    return applicationRates[formValues.weedSize];
+  }, [applicationRates, formValues.weedSize]);
+
+  return (
+    <form className="estimator-form" onSubmit={(e) => e.preventDefault()}>
+      <div className="estimator-form__header">
+        <h2 className="estimator-form__title">FireHawk Quantity Estimator</h2>
+        <button
+          type="button"
+          className="estimator-form__unit-toggle"
+          onClick={handleUnitSystemToggle}
+          aria-label={ARIA_LABELS.unitSystemToggle}
+          title={`Switch to ${unitSystem === 'imperial' ? 'metric' : 'imperial'} units`}
+        >
+          <span className={`estimator-form__unit-option ${unitSystem === 'imperial' ? 'estimator-form__unit-option--active' : ''}`}>
+            Imperial
+          </span>
+          <div className="estimator-form__unit-slider">
+            <div className={`estimator-form__unit-slider-handle ${unitSystem === 'metric' ? 'estimator-form__unit-slider-handle--metric' : ''}`} />
+          </div>
+          <span className={`estimator-form__unit-option ${unitSystem === 'metric' ? 'estimator-form__unit-option--active' : ''}`}>
+            Metric
+          </span>
+        </button>
+      </div>
+
+      <div className="estimator-form__content">
+        {/* Area Input Section */}
+        <div className="estimator-form__section">
+          <AreaInput
+            value={formValues.area}
+            onChange={handleAreaChange}
+            unitSystem={unitSystem}
+            min={100}
+            max={100000}
+            step={unitSystem === 'imperial' ? 100 : 10}
+            label="Coverage Area"
+            showSlider={true}
+            showManualInput={true}
+          />
+        </div>
+
+        {/* Weed Size Selection */}
+        <div className="estimator-form__section">
+          <WeedSizeSelector
+            value={formValues.weedSize}
+            onChange={handleWeedSizeChange}
+            options={weedSizeConfig}
+            layout="cards"
+          />
+        </div>
+
+        {/* Application Rate Slider */}
+        <div className="estimator-form__section">
+          <ApplicationRateSlider
+            value={formValues.applicationRate}
+            onChange={handleApplicationRateChange}
+            min={rateBounds.min}
+            max={rateBounds.max}
+            step={0.1}
+            unit={formValues.applicationUnit}
+            weedSize={formValues.weedSize}
+            showMarkers={true}
+          />
+        </div>
+
+        {/* Summary Info */}
+        <div className="estimator-form__summary">
+          <div className="estimator-form__summary-card">
+            <h4>Current Settings</h4>
+            <div className="estimator-form__summary-items">
+              <div className="estimator-form__summary-item">
+                <span className="estimator-form__summary-label">Area:</span>
+                <span className="estimator-form__summary-value">
+                  {unitConverter.formatArea(formValues.area, formValues.areaUnit)}
+                </span>
+              </div>
+              <div className="estimator-form__summary-item">
+                <span className="estimator-form__summary-label">Weed Size:</span>
+                <span className="estimator-form__summary-value">
+                  {weedSizeConfig.find(w => w.id === formValues.weedSize)?.label}
+                </span>
+              </div>
+              <div className="estimator-form__summary-item">
+                <span className="estimator-form__summary-label">Rate:</span>
+                <span className="estimator-form__summary-value">
+                  {unitConverter.formatVolume(formValues.applicationRate, formValues.applicationUnit)} per 1000 sq ft
+                </span>
+              </div>
+              <div className="estimator-form__summary-item">
+                <span className="estimator-form__summary-label">Units:</span>
+                <span className="estimator-form__summary-value">
+                  {unitSystem === 'imperial' ? 'Imperial' : 'Metric'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .estimator-form {
+          background: #ffffff;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.75rem;
+          overflow: hidden;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .estimator-form__header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5rem;
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .estimator-form__title {
+          margin: 0;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1e293b;
+          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .estimator-form__unit-toggle {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.5rem;
+          background: #ffffff;
+          border: 1px solid #d1d5db;
+          border-radius: 2rem;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .estimator-form__unit-toggle:hover {
+          border-color: #2563eb;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .estimator-form__unit-option {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #6b7280;
+          transition: color 0.15s ease;
+          text-transform: uppercase;
+          letter-spacing: 0.025em;
+          padding: 0.25rem 0.5rem;
+        }
+
+        .estimator-form__unit-option--active {
+          color: #2563eb;
+        }
+
+        .estimator-form__unit-slider {
+          position: relative;
+          width: 2.5rem;
+          height: 1.25rem;
+          background: #e5e7eb;
+          border-radius: 0.625rem;
+          transition: background-color 0.15s ease;
+        }
+
+        .estimator-form__unit-slider-handle {
+          position: absolute;
+          top: 0.125rem;
+          left: 0.125rem;
+          width: 1rem;
+          height: 1rem;
+          background: #2563eb;
+          border-radius: 50%;
+          transition: transform 0.15s ease;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .estimator-form__unit-slider-handle--metric {
+          transform: translateX(1.25rem);
+        }
+
+        .estimator-form__content {
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .estimator-form__section {
+          padding: 1.5rem;
+          background: #fafbfc;
+          border: 1px solid #f1f3f4;
+          border-radius: 0.75rem;
+          transition: all 0.15s ease;
+        }
+
+        .estimator-form__section:hover {
+          background: #f8fafc;
+          border-color: #e2e8f0;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .estimator-form__summary {
+          margin-top: 1rem;
+        }
+
+        .estimator-form__summary-card {
+          padding: 1.5rem;
+          background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+          border: 1px solid #bfdbfe;
+          border-radius: 0.75rem;
+        }
+
+        .estimator-form__summary-card h4 {
+          margin: 0 0 1rem;
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1e40af;
+        }
+
+        .estimator-form__summary-items {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .estimator-form__summary-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid rgba(191, 219, 254, 0.5);
+        }
+
+        .estimator-form__summary-item:last-child {
+          border-bottom: none;
+        }
+
+        .estimator-form__summary-label {
+          font-size: 0.875rem;
+          color: #1e40af;
+          font-weight: 500;
+        }
+
+        .estimator-form__summary-value {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #1e293b;
+        }
+
+        @media (max-width: 768px) {
+          .estimator-form__header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+          }
+          
+          .estimator-form__title {
+            font-size: 1.25rem;
+          }
+          
+          .estimator-form__content {
+            padding: 1.5rem;
+            gap: 1.5rem;
+          }
+          
+          .estimator-form__section {
+            padding: 1rem;
+          }
+          
+          .estimator-form__summary-items {
+            grid-template-columns: 1fr;
+          }
+          
+          .estimator-form__summary-item {
+            padding: 0.75rem 0;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .estimator-form__header {
+            padding: 1rem;
+          }
+          
+          .estimator-form__content {
+            padding: 1rem;
+            gap: 1rem;
+          }
+          
+          .estimator-form__section {
+            padding: 0.75rem;
+          }
+          
+          .estimator-form__summary-card {
+            padding: 1rem;
+          }
+        }
+      `}</style>
+    </form>
+  );
+};
+
+export default EstimatorForm;
