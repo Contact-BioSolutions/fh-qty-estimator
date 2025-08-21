@@ -86,7 +86,7 @@ export const EstimatorForm: React.FC<EstimatorFormProps> = ({
   return (
     <form className="estimator-form" onSubmit={(e) => e.preventDefault()}>
       <div className="estimator-form__header">
-        <h2 className="estimator-form__title">FireHawk Quantity Estimator</h2>
+        <h2 className="estimator-form__title">How much FireHawk do I need?</h2>
         <button
           type="button"
           className="estimator-form__unit-toggle"
