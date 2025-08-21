@@ -151,20 +151,77 @@
             box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
         }
         
+        .weed-area-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .area-input-container {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .area-input-container label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+            font-size: 1rem;
+        }
+        
+        .area-input-container input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 2.75rem;
+            text-align: center;
+            font-weight: 600;
+            color: #059669;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .weed-size-container {
+            flex: 2;
+        }
+        
+        .weed-size-box {
+            padding: 14px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+            height: 100%;
+        }
+        
+        .weed-size-box label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 0.85rem;
+        }
+        
         .weed-size-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
         }
         
         .weed-card {
-            padding: 16px;
+            padding: 14px;
             border: 2px solid #e5e7eb;
-            border-radius: 12px;
+            border-radius: 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
             background: #fafafa;
+            font-size: 0.85rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .weed-card:hover {
@@ -179,14 +236,15 @@
         }
         
         .weed-card h4 {
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             color: #374151;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
         
         .weed-card p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #6b7280;
+            line-height: 1.3;
         }
         
         .results {
@@ -313,8 +371,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌾 FireHawk Quantity Estimator</h1>
-            <p>Calculate herbicide and water requirements for your application</p>
+            <h1>How much FireHawk do I need?</h1>
+            <p>Calculate herbicide quantities using L/100L water application rates</p>
         </div>
         
         <div class="calculator">
@@ -323,61 +381,63 @@
                 <label>Unit System</label>
                 <div class="unit-selector">
                     <button id="metric-btn" class="active" onclick="setUnitSystem('metric')">Metric</button>
-                    <button id="imperial-btn" onclick="setUnitSystem('imperial')">Imperial</button>
+                    <button id="imperial-btn" onclick="setUnitSystem('imperial')">US</button>
                 </div>
             </div>
             
-            <!-- Area Input -->
+            <!-- Weed Size Selection & Area Input -->
             <div class="form-group">
-                <label id="area-label">Area (hectares)</label>
-                <div class="input-row">
-                    <input type="range" id="area-slider" min="0.1" max="100" step="0.1" value="10" oninput="updateCalculation()">
-                    <div class="value-display" id="area-value">10.0 ha</div>
-                </div>
-            </div>
-            
-            <!-- Weed Size Selection -->
-            <div class="form-group">
-                <label>Weed Size</label>
-                <div class="weed-size-selector">
-                    <div class="weed-card active" onclick="setWeedSize('small')" id="small-weed">
-                        <h4>Small</h4>
-                        <p>< 6 inches<br>200 L/ha</p>
+                <div class="weed-area-container">
+                    <div class="area-input-container">
+                        <label id="area-label">Sprayed Area (ha)</label>
+                        <input type="number" id="area-input" min="0.1" max="1000" step="0.1" value="10" oninput="updateCalculation()">
                     </div>
-                    <div class="weed-card" onclick="setWeedSize('medium')" id="medium-weed">
-                        <h4>Medium</h4>
-                        <p>6-12 inches<br>300 L/ha</p>
-                    </div>
-                    <div class="weed-card" onclick="setWeedSize('large')" id="large-weed">
-                        <h4>Large</h4>
-                        <p>> 12 inches<br>500 L/ha</p>
+                    
+                    <div class="weed-size-container">
+                        <div class="weed-size-box">
+                            <label>Weed Size</label>
+                            <div class="weed-size-selector">
+                                <div class="weed-card active" onclick="setWeedSize('small')" id="small-weed">
+                                    <h4>Small</h4>
+                                    <p>< 15cm<br>750 L/ha</p>
+                                </div>
+                                <div class="weed-card" onclick="setWeedSize('medium')" id="medium-weed">
+                                    <h4>Medium</h4>
+                                    <p>15-30cm<br>900 L/ha</p>
+                                </div>
+                                <div class="weed-card" onclick="setWeedSize('large')" id="large-weed">
+                                    <h4>Large</h4>
+                                    <p>> 30cm<br>1000 L/ha</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <!-- Application Rate -->
             <div class="form-group">
-                <label id="rate-label">Application Rate (L/ha)</label>
+                <label id="rate-label">FireHawk Label Rate (L/100L water)</label>
                 <div class="input-row">
-                    <input type="range" id="rate-slider" min="1" max="5" step="0.1" value="2.5" oninput="updateCalculation()">
-                    <div class="value-display" id="rate-value">2.5 L/ha</div>
+                    <input type="range" id="rate-slider" min="3.3" max="5.0" step="0.1" value="4.0" oninput="updateCalculation()">
+                    <div class="value-display" id="rate-value">4.0 L/100L</div>
                 </div>
             </div>
             
             <!-- Results -->
             <div class="results">
-                <h3>📊 Calculation Results</h3>
+                <h3>Calculation Results</h3>
                 <div class="result-grid">
                     <div class="result-item">
                         <div class="result-value" id="firehawk-result">25.0 L</div>
                         <div class="result-label">FireHawk Required</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-value" id="water-result">1,975 L</div>
+                        <div class="result-value" id="water-result">7,125 L</div>
                         <div class="result-label">Water Required</div>
                     </div>
                     <div class="result-item">
-                        <div class="result-value" id="total-result">2,000 L</div>
+                        <div class="result-value" id="total-result">7,500 L</div>
                         <div class="result-label">Total Spray Volume</div>
                     </div>
                 </div>
@@ -411,16 +471,16 @@
         let currentWeedSize = 'small';
         
         const weedSizeMultipliers = {
-            small: { sprayVolume: 200, label: '< 6 inches', imperial: 21.4 },
-            medium: { sprayVolume: 300, label: '6-12 inches', imperial: 32.1 },
-            large: { sprayVolume: 500, label: '> 12 inches', imperial: 53.5 }
+            small: { sprayVolume: 750, label: '< 15cm', imperial: 80.3 },
+            medium: { sprayVolume: 900, label: '15-30cm', imperial: 96.4 },
+            large: { sprayVolume: 1000, label: '> 30cm', imperial: 107.0 }
         };
         
         const packages = [
-            { size: 1, unit: 'L', price: 24.99, name: '1L Trial' },
-            { size: 5, unit: 'L', price: 89.99, name: '5L Standard' },
-            { size: 20, unit: 'L', price: 299.99, name: '20L Professional' },
-            { size: 100, unit: 'L', price: 1299.99, name: '100L Commercial' }
+            { size: 1, unit: 'L', price: 44, name: '1L Pack' },
+            { size: 5, unit: 'L', price: 135, name: '5L Pack' },
+            { size: 200, unit: 'L', price: 2800, name: '200L Bulk' },
+            { size: 1000, unit: 'L', price: 11000, name: '1000L Commercial' }
         ];
         
         // Unit conversion functions
@@ -450,27 +510,29 @@
             document.getElementById('metric-btn').classList.toggle('active', system === 'metric');
             document.getElementById('imperial-btn').classList.toggle('active', system === 'imperial');
             
-            const areaSlider = document.getElementById('area-slider');
+            const areaInput = document.getElementById('area-input');
             const rateSlider = document.getElementById('rate-slider');
             
             if (system === 'metric') {
-                document.getElementById('area-label').textContent = 'Area (hectares)';
-                document.getElementById('rate-label').textContent = 'Application Rate (L/ha)';
-                areaSlider.min = '0.1';
-                areaSlider.max = '100';
-                areaSlider.step = '0.1';
-                rateSlider.min = '1';
-                rateSlider.max = '5';
+                document.getElementById('area-label').textContent = 'Sprayed Area (hectares)';
+                document.getElementById('rate-label').textContent = 'FireHawk Label Rate (L/100L water)';
+                areaInput.min = '0.1';
+                areaInput.max = '1000';
+                areaInput.step = '0.1';
+                areaInput.placeholder = 'Enter hectares';
+                rateSlider.min = '3.3';
+                rateSlider.max = '5.0';
                 rateSlider.step = '0.1';
             } else {
-                document.getElementById('area-label').textContent = 'Area (acres)';
-                document.getElementById('rate-label').textContent = 'Application Rate (gal/ac)';
-                areaSlider.min = '0.25';
-                areaSlider.max = '247';
-                areaSlider.step = '0.25';
-                rateSlider.min = '0.1';
-                rateSlider.max = '0.5';
-                rateSlider.step = '0.01';
+                document.getElementById('area-label').textContent = 'Sprayed Area (acres)';
+                document.getElementById('rate-label').textContent = 'FireHawk Label Rate (L/100L water)';
+                areaInput.min = '0.25';
+                areaInput.max = '2471';
+                areaInput.step = '0.25';
+                areaInput.placeholder = 'Enter acres';
+                rateSlider.min = '3.3';
+                rateSlider.max = '5.0';
+                rateSlider.step = '0.1';
             }
             
             updateCalculation();
@@ -486,10 +548,10 @@
         
         // Main calculation function
         function updateCalculation() {
-            const areaSlider = document.getElementById('area-slider');
+            const areaInput = document.getElementById('area-input');
             const rateSlider = document.getElementById('rate-slider');
             
-            let area = parseFloat(areaSlider.value);
+            let area = parseFloat(areaInput.value) || 0;
             let applicationRate = parseFloat(rateSlider.value);
             
             // Convert to metric for calculations
@@ -505,23 +567,23 @@
             const sprayVolumeRate = weedSizeMultipliers[currentWeedSize].sprayVolume;
             const totalSprayVolume = areaHa * sprayVolumeRate;
             
-            // Calculate FireHawk quantity
-            const fireHawkQuantity = areaHa * rateLha;
+            // Calculate FireHawk quantity using L/100L methodology
+            const fireHawkQuantity = (applicationRate / 100) * totalSprayVolume;
             
             // Calculate water required
             const waterVolume = totalSprayVolume - fireHawkQuantity;
             
             // Update display values
             if (currentUnitSystem === 'metric') {
-                document.getElementById('area-value').textContent = area.toFixed(1) + ' ha';
-                document.getElementById('rate-value').textContent = applicationRate.toFixed(1) + ' L/ha';
-                document.getElementById('firehawk-result').textContent = fireHawkQuantity.toFixed(1) + ' L';
+                // Area input handles its own display
+                document.getElementById('rate-value').textContent = applicationRate.toFixed(1) + ' L/100L';
+                document.getElementById('firehawk-result').textContent = Math.round(fireHawkQuantity) + ' L';
                 document.getElementById('water-result').textContent = waterVolume.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' L';
                 document.getElementById('total-result').textContent = totalSprayVolume.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' L';
             } else {
-                document.getElementById('area-value').textContent = area.toFixed(1) + ' ac';
-                document.getElementById('rate-value').textContent = applicationRate.toFixed(2) + ' gal/ac';
-                document.getElementById('firehawk-result').textContent = litersToGallons(fireHawkQuantity).toFixed(1) + ' gal';
+                // Area input handles its own display
+                document.getElementById('rate-value').textContent = applicationRate.toFixed(1) + ' L/100L';
+                document.getElementById('firehawk-result').textContent = Math.round(litersToGallons(fireHawkQuantity)) + ' gal';
                 document.getElementById('water-result').textContent = litersToGallons(waterVolume).toLocaleString('en-US', {maximumFractionDigits: 0}) + ' gal';
                 document.getElementById('total-result').textContent = litersToGallons(totalSprayVolume).toLocaleString('en-US', {maximumFractionDigits: 0}) + ' gal';
             }
@@ -537,10 +599,10 @@
         function updateCalculationBreakdown(area, rate, sprayRate, fireHawk, water, total) {
             const breakdown = document.getElementById('calc-breakdown');
             breakdown.innerHTML = `
-                <div class="calc-step">1. Spray Volume Rate: ${sprayRate} L/ha (${currentWeedSize} weeds)</div>
-                <div class="calc-step">2. Total Spray Volume: ${area.toFixed(1)} ha × ${sprayRate} L/ha = ${total.toFixed(0)} L</div>
-                <div class="calc-step">3. FireHawk Required: ${area.toFixed(1)} ha × ${rate.toFixed(1)} L/ha = ${fireHawk.toFixed(1)} L</div>
-                <div class="calc-step">4. Water Required: ${total.toFixed(0)} L - ${fireHawk.toFixed(1)} L = ${water.toFixed(0)} L</div>
+                <div class="calc-step">1. Water Volume: ${sprayRate} L/ha for ${currentWeedSize} weeds</div>
+                <div class="calc-step">2. Total Water: ${area.toFixed(1)} ha × ${sprayRate} L/ha = ${total.toFixed(0)} L</div>
+                <div class="calc-step">3. FireHawk: ${rate.toFixed(1)}L/100L × ${total.toFixed(0)} L = ${fireHawk.toFixed(1)} L</div>
+                <div class="calc-step">4. Pure Water: ${total.toFixed(0)} L - ${fireHawk.toFixed(1)} L = ${water.toFixed(0)} L</div>
             `;
         }
         
@@ -548,7 +610,7 @@
         function updatePackageRecommendations(requiredQuantity) {
             const grid = document.getElementById('package-grid');
             let bestPackage = null;
-            let minWaste = Infinity;
+            let minCost = Infinity;
             
             const packageOptions = packages.map(pkg => {
                 const packagesNeeded = Math.ceil(requiredQuantity / pkg.size);
@@ -557,8 +619,8 @@
                 const totalCost = packagesNeeded * pkg.price;
                 const costPerLiter = totalCost / totalQuantity;
                 
-                if (waste < minWaste && totalQuantity >= requiredQuantity) {
-                    minWaste = waste;
+                if (totalCost < minCost && totalQuantity >= requiredQuantity) {
+                    minCost = totalCost;
                     bestPackage = pkg;
                 }
                 
@@ -573,7 +635,7 @@
                 };
             }).filter(option => option.totalQuantity >= requiredQuantity);
             
-            // Mark best package as recommended
+            // Mark best package as recommended (most cost-effective)
             packageOptions.forEach(option => {
                 if (option.size === bestPackage?.size) {
                     option.isRecommended = true;
@@ -584,10 +646,10 @@
                 <div class="package-card ${option.isRecommended ? 'recommended' : ''}">
                     <h4>${option.name}</h4>
                     <p>${option.packagesNeeded} × ${option.size}L</p>
-                    <p><strong>$${option.totalCost.toFixed(0)}</strong></p>
+                    <p><strong>$${option.totalCost.toLocaleString('en-US', {maximumFractionDigits: 0})}</strong></p>
                     <p style="font-size: 0.8rem; color: #6b7280;">
-                        ${option.waste.toFixed(1)}L waste<br>
-                        $${option.costPerLiter.toFixed(2)}/L
+                        ${Math.round(option.waste)}L remaining<br>
+                        $${Math.round(option.costPerLiter)}/L
                     </p>
                 </div>
             `).join('');
