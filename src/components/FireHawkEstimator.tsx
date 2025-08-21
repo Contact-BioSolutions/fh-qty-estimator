@@ -9,9 +9,9 @@ import { useFireHawkCalculator, useRealtimeCalculation, useEstimatorValues } fro
 import { 
   DEFAULT_ESTIMATOR_VALUES, 
   WEED_SIZE_CONFIG, 
-  DEFAULT_APPLICATION_RATES,
-  DEFAULT_THEME 
+  DEFAULT_APPLICATION_RATES
 } from '../constants';
+import { brandColors, typography, spacing, borderRadius, boxShadow } from '../constants/brandTokens';
 
 export const FireHawkEstimator: React.FC<FireHawkEstimatorProps> = ({
   productInfo,
@@ -225,22 +225,23 @@ export const FireHawkEstimator: React.FC<FireHawkEstimatorProps> = ({
         .firehawk-estimator {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 1rem;
-          font-family: ${DEFAULT_THEME.typography.fontFamily};
-          color: ${DEFAULT_THEME.colors.text.primary};
-          background: ${DEFAULT_THEME.colors.background};
+          padding: ${spacing[4]};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.neutral[900]};
+          background: ${brandColors.neutral[50]};
         }
 
         .firehawk-estimator__error-banner {
           display: flex;
           align-items: flex-start;
-          gap: 0.75rem;
-          padding: 1rem;
-          margin-bottom: 1.5rem;
-          background: #fef2f2;
-          border: 1px solid #fecaca;
-          border-radius: 0.5rem;
-          color: #dc2626;
+          gap: ${spacing[3]};
+          padding: ${spacing[4]};
+          margin-bottom: ${spacing[6]};
+          background: ${brandColors.semantic.error[50]};
+          border: 1px solid ${brandColors.semantic.error[500]};
+          border-radius: ${borderRadius.lg};
+          color: ${brandColors.semantic.error[600]};
+          box-shadow: ${boxShadow.sm};
         }
 
         .firehawk-estimator__error-icon {
@@ -297,21 +298,24 @@ export const FireHawkEstimator: React.FC<FireHawkEstimatorProps> = ({
         .firehawk-estimator__reset-button {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem 1rem;
-          background: #f3f4f6;
-          border: 1px solid #d1d5db;
-          border-radius: 0.375rem;
-          color: #374151;
-          font-size: 0.875rem;
-          font-weight: 500;
+          gap: ${spacing[2]};
+          padding: ${spacing[2]} ${spacing[4]};
+          background: ${brandColors.neutral[100]};
+          border: 1px solid ${brandColors.neutral[300]};
+          border-radius: ${borderRadius.md};
+          color: ${brandColors.neutral[700]};
+          font-size: ${typography.fontSize.sm[0]};
+          font-weight: ${typography.fontWeight.medium};
+          font-family: ${typography.fontFamily.sans.join(', ')};
           cursor: pointer;
           transition: all 0.15s ease;
+          box-shadow: ${boxShadow.sm};
         }
 
         .firehawk-estimator__reset-button:hover {
-          background: #e5e7eb;
-          border-color: #9ca3af;
+          background: ${brandColors.neutral[200]};
+          border-color: ${brandColors.neutral[400]};
+          box-shadow: ${boxShadow.md};
         }
 
         .firehawk-estimator__results-section {
@@ -348,42 +352,45 @@ export const FireHawkEstimator: React.FC<FireHawkEstimatorProps> = ({
         }
 
         .firehawk-estimator__footer {
-          margin-top: 2rem;
-          padding: 1.5rem;
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 0.75rem;
+          margin-top: ${spacing[8]};
+          padding: ${spacing[6]};
+          background: ${brandColors.primary[50]};
+          border: 1px solid ${brandColors.primary[200]};
+          border-radius: ${borderRadius.xl};
+          box-shadow: ${boxShadow.sm};
         }
 
         .firehawk-estimator__product-info {
-          margin-bottom: 1rem;
+          margin-bottom: ${spacing[4]};
         }
 
         .firehawk-estimator__product-info h4 {
-          margin: 0 0 0.25rem;
-          font-size: 1.125rem;
-          font-weight: 600;
-          color: #1e293b;
+          margin: 0 0 ${spacing[1]};
+          font-size: ${typography.fontSize.lg[0]};
+          font-weight: ${typography.fontWeight.semibold};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.primary[800]};
         }
 
         .firehawk-estimator__product-info p {
           margin: 0;
-          font-size: 0.875rem;
-          color: #64748b;
+          font-size: ${typography.fontSize.sm[0]};
+          color: ${brandColors.primary[600]};
         }
 
         .firehawk-estimator__disclaimer {
-          padding: 1rem;
-          background: #fff7ed;
-          border: 1px solid #fed7aa;
-          border-radius: 0.5rem;
+          padding: ${spacing[4]};
+          background: ${brandColors.secondary[50]};
+          border: 1px solid ${brandColors.secondary[200]};
+          border-radius: ${borderRadius.lg};
         }
 
         .firehawk-estimator__disclaimer p {
           margin: 0;
-          font-size: 0.75rem;
-          color: #9a3412;
+          font-size: ${typography.fontSize.xs[0]};
+          color: ${brandColors.secondary[700]};
           line-height: 1.4;
+          font-family: ${typography.fontFamily.sans.join(', ')};
         }
 
         @media (max-width: 1024px) {

@@ -7,6 +7,7 @@ import { WeedSizeSelector } from './WeedSizeSelector';
 import { ApplicationRateSlider } from './ApplicationRateSlider';
 import { unitConverter } from '../utils/UnitConverter';
 import { UNIT_SYSTEM_DEFAULTS, ARIA_LABELS } from '../constants';
+import { brandColors, typography, spacing, borderRadius, boxShadow } from '../constants/brandTokens';
 
 export const EstimatorForm: React.FC<EstimatorFormProps> = ({
   onValuesChange,
@@ -181,28 +182,29 @@ export const EstimatorForm: React.FC<EstimatorFormProps> = ({
 
       <style jsx>{`
         .estimator-form {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 0.75rem;
+          background: ${brandColors.neutral[50]};
+          border: 1px solid ${brandColors.neutral[200]};
+          border-radius: ${borderRadius.xl};
           overflow: hidden;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          box-shadow: ${boxShadow.lg};
         }
 
         .estimator-form__header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1.5rem;
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-          border-bottom: 1px solid #e2e8f0;
+          padding: ${spacing[6]};
+          background: linear-gradient(135deg, ${brandColors.primary[50]} 0%, ${brandColors.primary[100]} 100%);
+          border-bottom: 1px solid ${brandColors.primary[200]};
         }
 
         .estimator-form__title {
           margin: 0;
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #1e293b;
-          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          font-size: ${typography.fontSize['2xl'][0]};
+          font-weight: ${typography.fontWeight.bold};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.primary[800]};
+          background: linear-gradient(135deg, ${brandColors.primary[600]} 0%, ${brandColors.primary[700]} 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -211,58 +213,60 @@ export const EstimatorForm: React.FC<EstimatorFormProps> = ({
         .estimator-form__unit-toggle {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.5rem;
-          background: #ffffff;
-          border: 1px solid #d1d5db;
-          border-radius: 2rem;
+          gap: ${spacing[3]};
+          padding: ${spacing[2]};
+          background: ${brandColors.neutral[50]};
+          border: 1px solid ${brandColors.primary[300]};
+          border-radius: ${borderRadius.full};
           cursor: pointer;
           transition: all 0.15s ease;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: ${boxShadow.sm};
         }
 
         .estimator-form__unit-toggle:hover {
-          border-color: #2563eb;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          border-color: ${brandColors.primary[500]};
+          box-shadow: ${boxShadow.md};
+          background: ${brandColors.neutral[100]};
         }
 
         .estimator-form__unit-option {
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: #6b7280;
+          font-size: ${typography.fontSize.xs[0]};
+          font-weight: ${typography.fontWeight.semibold};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.neutral[500]};
           transition: color 0.15s ease;
           text-transform: uppercase;
-          letter-spacing: 0.025em;
-          padding: 0.25rem 0.5rem;
+          letter-spacing: ${typography.letterSpacing.wide};
+          padding: ${spacing[1]} ${spacing[2]};
         }
 
         .estimator-form__unit-option--active {
-          color: #2563eb;
+          color: ${brandColors.primary[600]};
         }
 
         .estimator-form__unit-slider {
           position: relative;
-          width: 2.5rem;
-          height: 1.25rem;
-          background: #e5e7eb;
-          border-radius: 0.625rem;
+          width: ${spacing[10]};
+          height: ${spacing[5]};
+          background: ${brandColors.neutral[300]};
+          border-radius: ${borderRadius.full};
           transition: background-color 0.15s ease;
         }
 
         .estimator-form__unit-slider-handle {
           position: absolute;
-          top: 0.125rem;
-          left: 0.125rem;
-          width: 1rem;
-          height: 1rem;
-          background: #2563eb;
+          top: ${spacing[0.5]};
+          left: ${spacing[0.5]};
+          width: ${spacing[4]};
+          height: ${spacing[4]};
+          background: ${brandColors.primary[500]};
           border-radius: 50%;
           transition: transform 0.15s ease;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+          box-shadow: ${boxShadow.md};
         }
 
         .estimator-form__unit-slider-handle--metric {
-          transform: translateX(1.25rem);
+          transform: translateX(${spacing[5]});
         }
 
         .estimator-form__content {

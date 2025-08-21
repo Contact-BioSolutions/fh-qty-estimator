@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { CalculationDisplayProps } from '../types';
 import { unitConverter } from '../utils/UnitConverter';
+import { brandColors, typography, spacing, borderRadius, boxShadow } from '../constants/brandTokens';
 
 export const CalculationDisplay: React.FC<CalculationDisplayProps> = ({
   calculation,
@@ -259,11 +260,11 @@ export const CalculationDisplay: React.FC<CalculationDisplayProps> = ({
 
       <style jsx>{`
         .calculation-display {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 0.75rem;
+          background: ${brandColors.neutral[50]};
+          border: 1px solid ${brandColors.neutral[200]};
+          border-radius: ${borderRadius.xl};
           overflow: hidden;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          box-shadow: ${boxShadow.lg};
         }
 
         .calculation-display--empty {
@@ -299,32 +300,33 @@ export const CalculationDisplay: React.FC<CalculationDisplayProps> = ({
 
         .calculation-display__tabs {
           display: flex;
-          border-bottom: 1px solid #e5e7eb;
-          background: #f9fafb;
+          border-bottom: 1px solid ${brandColors.neutral[200]};
+          background: ${brandColors.neutral[100]};
         }
 
         .calculation-display__tab {
           flex: 1;
-          padding: 0.75rem 1rem;
+          padding: ${spacing[3]} ${spacing[4]};
           border: none;
           background: none;
-          font-size: 0.875rem;
-          font-weight: 500;
-          color: #6b7280;
+          font-size: ${typography.fontSize.sm[0]};
+          font-weight: ${typography.fontWeight.medium};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.neutral[600]};
           cursor: pointer;
           transition: all 0.15s ease;
           border-bottom: 2px solid transparent;
         }
 
         .calculation-display__tab:hover {
-          color: #374151;
-          background: #f3f4f6;
+          color: ${brandColors.neutral[800]};
+          background: ${brandColors.neutral[200]};
         }
 
         .calculation-display__tab--active {
-          color: #2563eb;
-          border-bottom-color: #2563eb;
-          background: #ffffff;
+          color: ${brandColors.primary[600]};
+          border-bottom-color: ${brandColors.primary[500]};
+          background: ${brandColors.neutral[50]};
         }
 
         .calculation-display__content {
@@ -341,52 +343,56 @@ export const CalculationDisplay: React.FC<CalculationDisplayProps> = ({
         .calculation-display__result-card {
           display: flex;
           align-items: flex-start;
-          gap: 1rem;
-          padding: 1.25rem;
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 0.5rem;
+          gap: ${spacing[4]};
+          padding: ${spacing[5]};
+          background: ${brandColors.neutral[100]};
+          border: 1px solid ${brandColors.neutral[300]};
+          border-radius: ${borderRadius.lg};
           transition: all 0.15s ease;
+          box-shadow: ${boxShadow.sm};
         }
 
         .calculation-display__result-card--primary {
-          background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-          border-color: #bfdbfe;
+          background: linear-gradient(135deg, ${brandColors.primary[50]} 0%, ${brandColors.primary[100]} 100%);
+          border-color: ${brandColors.primary[300]};
         }
 
         .calculation-display__result-card--cost {
-          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-          border-color: #bbf7d0;
+          background: linear-gradient(135deg, ${brandColors.accent[50]} 0%, ${brandColors.accent[100]} 100%);
+          border-color: ${brandColors.accent[300]};
         }
 
         .calculation-display__result-icon {
           flex-shrink: 0;
-          color: #2563eb;
+          color: ${brandColors.primary[600]};
         }
 
         .calculation-display__result-card--cost .calculation-display__result-icon {
-          color: #059669;
+          color: ${brandColors.accent[600]};
         }
 
         .calculation-display__result-content h3 {
-          margin: 0 0 0.5rem;
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: #374151;
+          margin: 0 0 ${spacing[2]};
+          font-size: ${typography.fontSize.sm[0]};
+          font-weight: ${typography.fontWeight.semibold};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.neutral[700]};
           text-transform: uppercase;
-          letter-spacing: 0.025em;
+          letter-spacing: ${typography.letterSpacing.wide};
         }
 
         .calculation-display__result-value {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #111827;
-          margin-bottom: 0.25rem;
+          font-size: ${typography.fontSize['2xl'][0]};
+          font-weight: ${typography.fontWeight.bold};
+          font-family: ${typography.fontFamily.sans.join(', ')};
+          color: ${brandColors.neutral[900]};
+          margin-bottom: ${spacing[1]};
         }
 
         .calculation-display__result-description {
-          font-size: 0.75rem;
-          color: #6b7280;
+          font-size: ${typography.fontSize.xs[0]};
+          color: ${brandColors.neutral[600]};
+          font-family: ${typography.fontFamily.sans.join(', ')};
         }
 
         .calculation-display__cost-analysis {
