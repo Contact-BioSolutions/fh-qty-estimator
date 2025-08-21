@@ -50,48 +50,52 @@ export const CONVERSION_FACTORS = {
   }
 } as const;
 
-// Weed Size Configuration
+// Weed Size Configuration with water volume rates (L/ha)
 export const WEED_SIZE_CONFIG: WeedSizeConfig[] = [
   {
     id: WeedSize.SMALL,
     label: 'Small Weeds',
     description: 'Less than 6 inches tall',
     multiplier: 1.0,
-    minRate: 1.0,
-    maxRate: 2.0
+    minRate: 3.0,
+    maxRate: 7.0,
+    waterVolumePerHa: 750  // L/ha for small weeds
   },
   {
     id: WeedSize.MEDIUM,
     label: 'Medium Weeds',
     description: '6-12 inches tall',
-    multiplier: 1.25,
-    minRate: 1.5,
-    maxRate: 3.0
+    multiplier: 1.0,
+    minRate: 4.0,
+    maxRate: 8.0,
+    waterVolumePerHa: 900  // L/ha for medium weeds
   },
   {
     id: WeedSize.LARGE,
     label: 'Large Weeds',
     description: '12-24 inches tall',
-    multiplier: 1.5,
-    minRate: 2.0,
-    maxRate: 4.0
+    multiplier: 1.0,
+    minRate: 5.0,
+    maxRate: 9.0,
+    waterVolumePerHa: 1000  // L/ha for large weeds
   },
   {
     id: WeedSize.EXTRA_LARGE,
     label: 'Extra Large Weeds',
     description: 'Over 24 inches tall',
-    multiplier: 2.0,
-    minRate: 3.0,
-    maxRate: 6.0
+    multiplier: 1.0,
+    minRate: 5.0,
+    maxRate: 10.0,
+    waterVolumePerHa: 1000  // L/ha for extra large weeds
   }
 ];
 
-// Default Application Rates (fl oz per 1000 sq ft)
+// Default Application Rates (L/100L of water)
 export const DEFAULT_APPLICATION_RATES = {
-  [WeedSize.SMALL]: { min: 1.0, max: 2.0, default: 1.5 },
-  [WeedSize.MEDIUM]: { min: 1.5, max: 3.0, default: 2.0 },
-  [WeedSize.LARGE]: { min: 2.0, max: 4.0, default: 3.0 },
-  [WeedSize.EXTRA_LARGE]: { min: 3.0, max: 6.0, default: 4.0 }
+  [WeedSize.SMALL]: { min: 3.0, max: 7.0, default: 5.0 },
+  [WeedSize.MEDIUM]: { min: 4.0, max: 8.0, default: 5.0 },
+  [WeedSize.LARGE]: { min: 5.0, max: 9.0, default: 6.0 },
+  [WeedSize.EXTRA_LARGE]: { min: 5.0, max: 10.0, default: 7.0 }
 } as const;
 
 // Responsive Breakpoints
@@ -145,15 +149,20 @@ export const DEFAULT_ESTIMATOR_VALUES = {
   area: 1000,
   areaUnit: AreaUnit.SQUARE_FEET,
   weedSize: WeedSize.MEDIUM,
-  applicationRate: 2.0,
-  applicationUnit: VolumeUnit.FLUID_OUNCES,
+  applicationRate: 5.0, // L/100L
+  applicationUnit: 'L/100L' as any,
   unitSystem: UnitSystem.IMPERIAL
 } as const;
 
 // Calculation Constants
 export const CALCULATION_CONSTANTS = {
-  // Standard spray volume (gallons per 1000 sq ft)
-  STANDARD_SPRAY_VOLUME: 2.0,
+  // Water volumes by weed size (L/ha)
+  WATER_VOLUMES: {
+    [WeedSize.SMALL]: 750,
+    [WeedSize.MEDIUM]: 900,
+    [WeedSize.LARGE]: 1000,
+    [WeedSize.EXTRA_LARGE]: 1000
+  },
   // Concentration ratio for FireHawk (%)
   FIREHAWK_CONCENTRATION: 2.5,
   // Minimum/Maximum area limits
@@ -226,8 +235,8 @@ export const VALIDATION_RULES = {
     step: 1
   },
   applicationRate: {
-    min: 0.5,
+    min: 3.0,
     max: 10.0,
-    step: 0.1
+    step: 0.5
   }
 } as const;

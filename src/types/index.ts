@@ -33,8 +33,9 @@ export interface WeedSizeConfig {
   label: string;
   description: string;
   multiplier: number;     // Application rate multiplier
-  minRate: number;        // Minimum application rate
-  maxRate: number;        // Maximum application rate
+  minRate: number;        // Minimum application rate (L/100L)
+  maxRate: number;        // Maximum application rate (L/100L)
+  waterVolumePerHa: number; // Water volume per hectare (L/ha)
 }
 
 // Product Configuration

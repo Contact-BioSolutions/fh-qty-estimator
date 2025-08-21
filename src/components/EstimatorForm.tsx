@@ -92,10 +92,10 @@ export const EstimatorForm: React.FC<EstimatorFormProps> = ({
           className="estimator-form__unit-toggle"
           onClick={handleUnitSystemToggle}
           aria-label={ARIA_LABELS.unitSystemToggle}
-          title={`Switch to ${unitSystem === 'imperial' ? 'metric' : 'imperial'} units`}
+          title={`Switch to ${unitSystem === 'imperial' ? 'metric' : 'US'} units`}
         >
           <span className={`estimator-form__unit-option ${unitSystem === 'imperial' ? 'estimator-form__unit-option--active' : ''}`}>
-            Imperial
+            US
           </span>
           <div className="estimator-form__unit-slider">
             <div className={`estimator-form__unit-slider-handle ${unitSystem === 'metric' ? 'estimator-form__unit-slider-handle--metric' : ''}`} />
@@ -166,13 +166,13 @@ export const EstimatorForm: React.FC<EstimatorFormProps> = ({
               <div className="estimator-form__summary-item">
                 <span className="estimator-form__summary-label">Rate:</span>
                 <span className="estimator-form__summary-value">
-                  {unitConverter.formatVolume(formValues.applicationRate, formValues.applicationUnit)} per 1000 sq ft
+                  {formValues.applicationRate.toFixed(1)} L/100L
                 </span>
               </div>
               <div className="estimator-form__summary-item">
                 <span className="estimator-form__summary-label">Units:</span>
                 <span className="estimator-form__summary-value">
-                  {unitSystem === 'imperial' ? 'Imperial' : 'Metric'}
+                  {unitSystem === 'imperial' ? 'US' : 'Metric'}
                 </span>
               </div>
             </div>
